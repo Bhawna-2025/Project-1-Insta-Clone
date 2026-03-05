@@ -1,5 +1,5 @@
-const userModel = require("../model/userModel")
-const crypto = require("crypto")
+const userModel = require("../model/user.model")
+const bcrypt=require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
 async function registerController(req, res){
@@ -15,7 +15,7 @@ async function registerController(req, res){
             message: "user already exist" + (isUserAlreadyExist.email == email ? "email is already exit" : "username is already exist")
         })
     }
-    const hash = crypto.createHash("md5").update(password).digest("hex")
+    const hash = await bcrypt.hash(password,10)
     const user = await userModel.create({
         username,
         email,
@@ -64,8 +64,7 @@ async function loginController(req, res){
         })
     }
     //agar user mil gya toh
-    const hash=crypto.createHash("md5").update(password).digest("hex")
-    const isvalidpassword = hash===user.password
+    const isvalidpassword = await bcrypt.compare(password,user.password)
     if(!isvalidpassword){
         res.status(409).json({
             message:"password is incorrect"
