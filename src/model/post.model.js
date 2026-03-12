@@ -4,7 +4,7 @@ const postSchema=mongoose.Schema({
         type:String,
         default:""
     },
-    profile_img:{
+   image:{
         type:String,
         required:[true,"image required is required"]
     },
@@ -12,7 +12,15 @@ const postSchema=mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"user",
         required:[true,"user id is required for creating a post"]
-    }
+    },
+    followers:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user",
+    }],
+    following:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"user",
+    }]
 })
 
 const postModel=mongoose.model("posts",postSchema)
