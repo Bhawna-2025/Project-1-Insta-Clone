@@ -17,8 +17,10 @@ const jwt=require("jsonwebtoken")
                 message:"Unauthorized Access"
             })
         }
-        
+    console.log(decoded) 
     req.user=decoded.id
+    req.username=decoded.username
+
     next()
 }
 module.exports=identifyUser

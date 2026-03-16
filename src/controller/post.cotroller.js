@@ -1,5 +1,6 @@
 // const express=require("express")
 const postModel=require("../model/post.model")
+const likeModel=require("../model/like.model")
 const ImageKit=require("@imagekit/nodejs")//imagekit package download krne ke baad 
 const  { toFile }=require("@imagekit/nodejs")//imagekit package download krne ke baad 
 const jwt =require("jsonwebtoken")
@@ -69,8 +70,30 @@ async function getPostDetails(req,res){
     })
 }
 
+async function likePostController(req,res){
+    user=req.username//kon like kr rha hain
+    postId=req.params.postId//konsi post ko like kr rhe 
+
+    if(!postId){
+        return res.status(401).json({
+            message:"Post not found"
+        })
+    }
+
+    const likes =await likeModel.create({
+        postId,
+        user,
+    })
+
+    res.status(200).json({
+        message:"like data is stored",
+        likes
+    })
+}
+
 module.exports={
     createPostController,
     getPost,
-    getPostDetails
+    getPostDetails,
+    likePostController
 }

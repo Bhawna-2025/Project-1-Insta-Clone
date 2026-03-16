@@ -1,16 +1,24 @@
 const mongoose=require("mongoose")
 const followSchema=new mongoose.Schema({
     follower:{
-        type:mongoose.Schema.ObjectId,
-        ref:"user",
+        type:String,
         required:[true,"folllower is required"]
     },
-    following:{
-        type:mongoose.Schema.ObjectId,
-        ref:"user",
+    followee:{
+        type:String,
         required:[true,"following in required"]
+    },
+    status:{
+        type:String,
+        default:"pending",
+        enum:{
+            values:["pending","accepted","rejected"],
+            message:"status can be pending, accepted or rejected"
+        }
     }
 },{timestamps:true})
 
-const followModel=mongoose.model("model",followSchema)
+followSchema.index({follower:1,followee:1},{unique:true})//schema/database level validation
+
+const followModel=mongoose.model("follow",followSchema)
 module.exports=followModel
