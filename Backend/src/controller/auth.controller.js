@@ -58,7 +58,7 @@ async function loginController(req, res){
                 email:email
             }
         ]
-    })
+    }).select("+password")
     //agar user na mile toh
     if(!user){
         return res.status(409).json({

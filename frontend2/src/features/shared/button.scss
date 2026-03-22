@@ -1,0 +1,16 @@
+button {
+    padding: 0.7rem 1rem;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    
+    &.primary-button{
+        background-color: palevioletred;
+    }
+
+    &:active{
+        transform: scale(0.9);
+    }
+}

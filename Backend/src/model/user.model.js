@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema({
     },
     password: {
         type:String,
-        required:[true,"email is required"]
+        required:[true,"email is required"],
+        select:false //esse database by default password padhna bnd kr dega
     },
     bio: String,
     profile_img: {

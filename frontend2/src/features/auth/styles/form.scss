@@ -1,0 +1,38 @@
+@mixin flex-colomn($gap: 0rem){
+        display: flex;
+        flex-direction: column;
+        gap:$gap
+}
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    .form-container{
+        @include flex-colomn();
+        width: fit-content;
+        
+        h1{
+            padding-bottom: 15px;
+            margin: auto;
+        }
+
+        form{
+            @include flex-colomn(1rem);    
+            input{
+                padding: 10px 40px;
+                border-radius: 20px;
+                border: none;
+            }
+        }
+        p{
+            padding-top: 10px;
+            font-weight: 300;
+            padding-left: 10px;
+           
+        }
+    }
+}
+

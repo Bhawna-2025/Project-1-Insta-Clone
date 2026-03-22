@@ -1,0 +1,92 @@
+.feed-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+
+    .feed {
+        .posts {
+            display: flex;
+            flex-direction: column;
+            gap:0.1rem;
+
+            .post {
+                display: flex;
+                flex-direction: column;
+                gap: 0.2rem;
+                background-color: rgb(4, 4, 18);
+                padding: 1.2rem;
+                border-radius: 1.5rem;
+
+                .user {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    .img-wrapper {
+                        height: 3.5rem;
+                        width: 3.5rem;
+                        border-radius: 50%;
+                        background:linear-gradient(180deg , rgb(199, 77, 7), rgb(125, 2, 125));
+                        display:flex;
+                        justify-content: center;
+                        align-items: center;
+                        
+                        img {
+                            width: 3rem;
+                            height: 3rem;
+                            aspect-ratio: 1/1;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+
+                img {
+                    width: 16rem;
+                    // height: 50vh;
+                    border-radius: 1.5rem;
+                }
+
+                .icons{
+                   display: flex;
+                   justify-content:space-between;
+                   align-items: center;
+                   gap: 4rem;
+                   .left{
+                        .like{
+                            color: red;
+                        }
+
+                       svg{
+                        width: 1rem;
+                        aspect-ratio: 1/1;
+                        color: white;
+                       }
+                       button{
+                        background-color: transparent;
+                          padding: 0.5rem 0.7rem;
+                       }
+                   } 
+                   .right{
+                     svg{
+                        width: 1rem;
+                        aspect-ratio: 1/1;
+                        color: white;
+                       }
+                       button{
+                        background-color: transparent;
+                          padding: 0.5rem 0.7rem;
+                       }
+                   }
+
+                }
+
+                .bottom{
+                    padding-left: 10px;
+                }
+
+            }
+        }
+    }
+}

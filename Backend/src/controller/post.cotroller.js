@@ -1,99 +1,122 @@
 // const express=require("express")
-const postModel=require("../model/post.model")
-const likeModel=require("../model/like.model")
-const ImageKit=require("@imagekit/nodejs")//imagekit package download krne ke baad 
-const  { toFile }=require("@imagekit/nodejs")//imagekit package download krne ke baad 
-const jwt =require("jsonwebtoken")
+const postModel = require("../model/post.model")
+const likeModel = require("../model/like.model")
+const ImageKit = require("@imagekit/nodejs")//imagekit package download krne ke baad 
+const { toFile } = require("@imagekit/nodejs")//imagekit package download krne ke baad 
+const jwt = require("jsonwebtoken")
 
 // below code is used to connect the server to oue imagekit account
-const imagekit= new ImageKit({
-    privateKey:process.env.IMAGE_PRIVATE_KEY  
+const imagekit = new ImageKit({
+    privateKey: process.env.IMAGE_PRIVATE_KEY
 })
 
-async function createPostController(req,res){
-    console.log(req.body,req.file)//from this line we will get caption
+async function createPostController(req, res) {
+    console.log(req.body, req.file)//from this line we will get caption
     console.log(req.user)
 
     //from below part we will get the image url
-    const file=await imagekit.files.upload({ //file server se imagekit upload krne ka code hain ye 
-        file:await toFile(Buffer.from(req.file.buffer),"file"),
-        fileName:"Test",
-        folder:"cohort-2-insta_clone"
+    const file = await imagekit.files.upload({ //file server se imagekit upload krne ka code hain ye 
+        file: await toFile(Buffer.from(req.file.buffer), "file"),
+        fileName: "Test",
+        folder: "cohort-2-insta_clone"
     })
     //here we are creating post
-    const post=await postModel.create({
-        caption:req.body.caption,
-        image:file.url,
-        user:req.user,
-        postId:req.body.postId
+    const post = await postModel.create({
+        caption: req.body.caption,
+        image: file.url,
+        user: req.user,
+        postId: req.body.postId
     })
 
     res.status(201).json({
-        message:"post created successfully",
+        message: "post created successfully",
         post
     })
 
 }
 
-async function getPost(req,res){
-    const Posts=await postModel.find({user:req.user})
+async function getPost(req, res) {
+    const Posts = await postModel.find({ user: req.user })
     console.log(Posts)
     res.status(200).json({
-        message:"post found successfully",
+        message: "post found successfully",
         Posts
     })
 
 }
 
-async function getPostDetails(req,res){
-    const userId=req.user
-    const postId=req.params.postId
+//esme jis user ki jis post j=ke data chahiye voh es api ka use kre
+async function getPostDetails(req, res) {
+    const userId = req.user
+    const postId = req.params.postId
 
-    const post =await postModel.findById(postId)
+    const post = await postModel.findById(postId)
 
-    if(!post){ 
+    if (!post) {
         return res.status(404).json({
-            message:"post not found"
+            message: "post not found"
         })
     }
-    const isValidPost= post.user.toString()===userId
+    const isValidPost = post.user.toString() === userId
 
-    if(!isValidPost){
+    if (!isValidPost) {
         return res.status(403).json({
-            message:"forbidden content",
+            message: "forbidden content",
         })
     }
 
     res.status(200).json({
-        message:"post founnd successfully",
+        message: "post founnd successfully",
         post
     })
 }
 
-async function likePostController(req,res){
-    user=req.username//kon like kr rha hain
-    postId=req.params.postId//konsi post ko like kr rhe 
+async function likePostController(req, res) {
+    user = req.username//kon like kr rha hain
+    postId = req.params.postId//konsi post ko like kr rhe 
 
-    if(!postId){
+    if (!postId) {
         return res.status(401).json({
-            message:"Post not found"
+            message: "Post not found"
         })
     }
 
-    const likes =await likeModel.create({
+    const likes = await likeModel.create({
         postId,
         user,
     })
 
     res.status(200).json({
-        message:"like data is stored",
+        message: "like data is stored",
         likes
     })
 }
 
-module.exports={
+async function getFeedController(req, res) {
+    const posts = await Promise.all((await postModel.find().populate("user").lean())
+    .map(async (post) => {
+        const isLiked=await likeModel.findOne({
+            postId:post._id,
+            user:req.username
+        })
+        console.log(isLiked)
+        post.isLiked=Boolean(isLiked)
+        return post
+    }))
+    
+    
+    res.status(200).json({
+        message:"post fetched successfully",
+        posts,
+        
+    })
+    console.log(posts)
+}
+
+module.exports = {
     createPostController,
     getPost,
     getPostDetails,
-    likePostController
+    likePostController,
+    getFeedController
 }

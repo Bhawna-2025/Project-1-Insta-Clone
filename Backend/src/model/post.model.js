@@ -13,14 +13,6 @@ const postSchema=mongoose.Schema({
         ref:"user",
         required:[true,"user id is required for creating a post"]
     },
-    followers:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"user",
-    }],
-    following:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"user",
-    }]
 })
 
 const postModel=mongoose.model("posts",postSchema)
